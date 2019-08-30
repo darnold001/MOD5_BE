@@ -28,12 +28,10 @@ type Property struct {
 	gorm.Model
 	LocationName string `json:"locationname"`
 	Address      string `json:"address"`
-	City         string `json:"city"`
-	State        string `json:"state" `
 	Latitude     string `json:"latitude"`
 	Longitude    string `json:"longitude"`
 	Photo        string `json:"photo"`
-	UserRefer    uint
+	UserRefer    uint   `json:"userID"`
 }
 
 var propertys []Property
@@ -183,12 +181,10 @@ func UpdateProperty(w http.ResponseWriter, r *http.Request) {
 	defer db.Close()
 	// json.NewDecoder(r.Body).Decode(&newProperty)
 	vars := mux.Vars(r)
-	locationname := vars["firstname"]
-	address := vars["lastname"]
-	city := vars["email"]
-	state := vars["role"]
-	latitude := vars["role"]
-	longitude := vars["role"]
+	locationname := vars["locationname"]
+	address := vars["address"]
+	latitude := vars["latitude"]
+	longitude := vars["longitude"]
 	photo := vars["photo"]
 
 	var property Property
@@ -196,8 +192,6 @@ func UpdateProperty(w http.ResponseWriter, r *http.Request) {
 
 	property.LocationName = locationname
 	property.Address = address
-	property.City = city
-	property.State = state
 	property.Latitude = latitude
 	property.Longitude = longitude
 	property.Photo = photo
