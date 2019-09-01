@@ -83,6 +83,21 @@ func NewUser(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(newUser)
 }
 
+func SelectUser (w http.ResponseWriter, r *http.Request){
+	db, err := gorm.Open("postgres", "user=Arnold dbname=user sslmode=disable")
+	if err != nil {
+		panic("failed to connect database")
+	}
+	defer db.Close()
+
+	vars := mux.Vars(r)
+	email := vars["email"]
+
+	user := User{}
+	db.Where("email = ?", email).Find(&user)
+	json.NewEncoder(w).Encode(&user)
+}
+
 func DeleteUser(w http.ResponseWriter, r *http.Request) {
 	db, err := gorm.Open("postgres", "user=Arnold dbname=user sslmode=disable")
 	if err != nil {

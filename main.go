@@ -24,6 +24,7 @@ func homepage(w http.ResponseWriter, r *http.Request) {
 func handleRequests() {
 	myRouter := mux.NewRouter().StrictSlash(true)
 	myRouter.HandleFunc("/users", user.AllUsers).Methods("GET")
+	myRouter.HandleFunc("/users/{email}", user.SelectUser).Methods("GET")
 	myRouter.HandleFunc("/user/{name}", user.DeleteUser).Methods("DELETE")
 	myRouter.HandleFunc("/user/{name}/{email}", user.UpdateUser).Methods("PUT")
 	myRouter.HandleFunc("/users", user.NewUser).Methods("POST")
