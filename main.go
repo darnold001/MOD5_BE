@@ -29,9 +29,9 @@ func handleRequests() {
 	myRouter.HandleFunc("/user/{name}/{email}", user.UpdateUser).Methods("PUT")
 	myRouter.HandleFunc("/users", user.NewUser).Methods("POST")
 	myRouter.HandleFunc("/properties", user.AllProperties).Methods("GET")
-	myRouter.HandleFunc("/property/{name}", user.DeleteProperty).Methods("DELETE")
+	myRouter.HandleFunc("/properties/{id}", user.DeleteProperty).Methods("DELETE")
 	myRouter.HandleFunc("/property/{name}/{email}", user.UpdateProperty).Methods("PUT")
 	myRouter.HandleFunc("/properties", user.NewProperty).Methods("POST")
-	log.Fatal(http.ListenAndServe(":3001", handlers.CORS(handlers.AllowedHeaders([]string{"X-Requested-With", "Content-Type", "Authorization"}), handlers.AllowedMethods([]string{"GET", "POST", "PUT", "HEAD", "OPTIONS"}), handlers.AllowedOrigins([]string{"*"}))(myRouter)))
+	log.Fatal(http.ListenAndServe(":3001", handlers.CORS(handlers.AllowedHeaders([]string{"X-Requested-With", "Content-Type", "Authorization"}), handlers.AllowedMethods([]string{"GET", "POST", "PUT", "HEAD", "DELETE", "OPTIONS"}), handlers.AllowedOrigins([]string{"*"}))(myRouter)))
 
 }

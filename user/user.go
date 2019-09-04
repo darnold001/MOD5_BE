@@ -32,10 +32,23 @@ type Property struct {
 	Longitude    string `json:"longitude"`
 	Photo        string `json:"photo"`
 	UserRefer    uint   `json:"userID"`
+	Accountings []Accounting `gorm:"foreignkey:PropertyRefer"`
+}
+
+type Accounting struct{
+	gorm.Model
+	Rent string `json:"rent"`
+	RentTotal float64 `json:"renttotal"`
+	Expenses string `json:"expenses"`
+	ExpenseTotal float64 `json:"expensetotal"`
+	PL float64 `json:"pl"`
+	Year string `json:"Year"`
+	PropertyRefer uint `json:"propertyID"`
 }
 
 var propertys []Property
 var users []User
+var accountings []Accounting
 
 //creates the initial migration for the User DB
 func InitialMigration() {
@@ -47,7 +60,7 @@ func InitialMigration() {
 	defer db.Close()
 
 	// Migrate the schema
-	db.AutoMigrate(&User{}, &Property{})
+	db.AutoMigrate(&User{}, &Property{}, &Accounting{})
 }
 
 func AllUsers(w http.ResponseWriter, r *http.Request) {
@@ -83,7 +96,7 @@ func NewUser(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(newUser)
 }
 
-func SelectUser (w http.ResponseWriter, r *http.Request){
+func SelectUser(w http.ResponseWriter, r *http.Request) {
 	db, err := gorm.Open("postgres", "user=Arnold dbname=user sslmode=disable")
 	if err != nil {
 		panic("failed to connect database")
@@ -179,10 +192,10 @@ func DeleteProperty(w http.ResponseWriter, r *http.Request) {
 	defer db.Close()
 
 	vars := mux.Vars(r)
-	email := vars["email"]
+	id := vars["id"]
 
 	property := Property{}
-	db.Where("email = ?", email).Find(&property)
+	db.Where("id = ?", id).Find(&property)
 	db.Delete(&property)
 
 	fmt.Fprintf(w, "Successfully Deleted User")
